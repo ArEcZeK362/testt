@@ -25,7 +25,7 @@ export async function GET(req: Request, res: Response) {
     console.log(JSON.stringify(all));
     if (!invitation || !info) {
       //return new NextResponse.json( {error: 'Invitation not found' }, { status: 404 });
-      return new Response.json({ error: 'Invation not found' }, { status: 404 });
+      return new (Response as any).json({ error: 'Invation not found' }, { status: 404 });
     }
     //return new NextResponse(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json' }});
     return new Response(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json ' }});
