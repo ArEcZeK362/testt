@@ -10,7 +10,7 @@ interface Invitation {
   time: string;
 }
 
-export async function GET(req: NextApiRequest, res: Response) {
+export async function GET(req: NextRequest, res: Response) {
   try {
     const client = await clientPromise;
     const db = client.db('osoby_osiemnastka');
