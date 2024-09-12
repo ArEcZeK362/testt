@@ -7,7 +7,7 @@ import confetti from 'canvas-confetti';
 
 // Typ dla zaproszenia
 interface Invitation {
-  name: string;
+  imie_nazwisko: string;
   location: string;
   date: string;
   time: string;
