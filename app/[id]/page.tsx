@@ -16,7 +16,7 @@ interface Invitation {
   osoba_towarzyszaca?: string | null;
 }
 
-export default function Home({ params }) {
+export default function Home({ params }: { params: any }) {
   const [invitation, setInvitation] = useState<Invitation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
