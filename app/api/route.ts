@@ -24,12 +24,15 @@ export async function GET(req: Request, res: Response) {
     console.log('===================================');
     console.log(JSON.stringify(all));
     if (!invitation || !info) {
-      return new NextResponse.json( {error: 'Invitation not found' }, { status: 404 });
+      //return new NextResponse.json( {error: 'Invitation not found' }, { status: 404 });
+      return new Response.json({ error: 'Invation not found' }, { status: 404 });
     }
-    return new NextResponse(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json' }});
+    //return new NextResponse(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json' }});
+    return new Response(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json ' }});
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ error: "inter" }, { status: 500 });
+    //return NextResponse.json({ error: "inter" }, { status: 500 });
+    return new Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -40,14 +43,17 @@ export async function POST(req: Request, res: Response) {
     const newInvitation: Invitation = req.body;
 
     if (!newInvitation.imie_nazwisko || !newInvitation.location || !newInvitation.date || !newInvitation.time) {
-      return new NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+      //return new NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+      return new Response.json({ error: 'Missing fields' }, { status: 400 });
     }
 
     const result = await db.collection('zaproszeni').insertOne(newInvitation);
-    return new NextResponse.json({ message: 'Invitation created' }, { status: 201 });
+    //return new NextResponse.json({ message: 'Invitation created' }, { status: 201 });
+    return new Response.json({ message: 'Invation created' }, { status: 201 });
   } catch (e) {
     console.error(e);
-    return new NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    //return new NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return new Response.json({ error: 'Internal server Error' }, { status: 500 });
   }
 }
 
@@ -59,13 +65,15 @@ export async function DELETE(req: Request, res: Response) {
     const result = await db.collection('zaproszeni').deleteOne({});
 
     if (result.deletedCount === 0) {
-      return new NextResponse.json({ error: 'No invitation found to delete' }, { status: 404 });
-      return;
+      //return new NextResponse.json({ error: 'No invitation found to delete' }, { status: 404 });
+      return new Response.json({ error: 'No invation found to delete ' }, { status: 404 });
     }
 
-    return new NextResponse.json({ message: 'Invitation deleted' }, { status: 200 });
+    //return new NextResponse.json({ message: 'Invitation deleted' }, { status: 200 });
+    return new Response.json({ message: 'Invation deleted' }, { status: 200 });
   } catch (e) {
     console.error(e);
-    return new NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    //return new NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return new Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
