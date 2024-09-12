@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Layout from '../components/invite';
-//import { pokemon } from '../styles/fonts';
 import confetti from 'canvas-confetti';
 
 // Typ dla zaproszenia
