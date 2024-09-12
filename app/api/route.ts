@@ -33,7 +33,7 @@ export async function GET(req: NextRequest, res: Response) {
   }
 }
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest, res: NextApiResponse) {
   try {
     const client = await clientPromise;
     const db = client.db('osoby_osiemnastka');
@@ -51,7 +51,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export async function DELETE(req: NextApiRequest, res: NextApiResponse) {
+export async function DELETE(req: NextRequest, res: NextApiResponse) {
   try {
     const client = await clientPromise;
     const db = client.db('osoby_osiemnastka');
