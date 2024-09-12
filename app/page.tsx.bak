@@ -1,0 +1,77 @@
+// pages/index.tsx
+"use client";
+import { useEffect, useState } from 'react';
+import Layout from './components/invite';
+import { streetbomber, stormgust, pokemon } from './styles/fonts';
+
+interface InvitationProps {
+  name: string;
+  location: string;
+  date: string;
+  time: string;
+}
+
+const Invitation: React.FC = () => {
+  const [invitation, setInvitation] = useState<InvitationProps | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchInvitation = async () => {
+      try {
+        const response = await fetch('/api');
+        if (!response.ok) {
+          throw new Error('Failed to fetch invitation data');
+        }
+        const data: InvitationProps = await response.json();
+        setInvitation(data);
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvitation();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (!invitation) {
+    return <p>No invitation data available</p>;
+  }
+
+  return (
+    <Layout>
+      <div className={pokemon.className} style={{ fontSize: '1.5rem' }}>
+	      <p>Serdecznie zapraszam na osiemnaste urodziny</p>
+	      <h2>{invitation.imie_nazwisko}</h2>
+	      <p>Impreza odbędzie się w:</p>
+	      <h3>{invitation.location}</h3>
+	      <p /*style={{ fontFamily: 'Arial, sans-serif' }}*/>Data: {invitation.date}</p>
+	      <p /*style={{ fontFamily: 'Arial, sans-serif' }}*/>Godzina: {invitation.time}</p>
+	  </div>
+    </Layout>
+  );
+
+  /*return (
+    <div style={{ fontFamily: 'Arial, sans-serif', textAlign: 'center', padding: '50px' }}>
+      <h1>Zaproszenie na Osiemnastkę!</h1>
+      <p>Serdecznie zapraszam na osiemnaste urodziny</p>
+      <h2>{invitation._id}</h2>
+      <p>Impreza odbędzie się w:</p>
+      <h3>{invitation.location}</h3>
+      <p>Data: {invitation.date}</p>
+      <p>Godzina: {invitation.time}</p>
+    </div>
+  );*/
+};
+
+export default Invitation;
+
