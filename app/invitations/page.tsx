@@ -17,7 +17,7 @@ export default function InvitationsPage() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  //const router = useRouter();
 
   useEffect(() => {
     const fetchInvitations = async () => {
