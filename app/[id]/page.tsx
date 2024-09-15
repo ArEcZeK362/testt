@@ -15,6 +15,7 @@ interface Info {
 
 // Typ dla zaproszenia
 interface Invitation {
+  0: any;
   imie_nazwisko: string;
   shortcut: string;
   plusOne: boolean;
@@ -130,7 +131,7 @@ export default function Home({ params }: { params: any }) {
           zIndex: 1,
           textAlign: 'center'
         }}>
-          {invitation ? (
+          {invitation && info ? (
             <>
               <p>Serdecznie zapraszam na osiemnaste urodziny</p>
               <h2><strong>{invitation[0].imie_nazwisko}</strong></h2>
