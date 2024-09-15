@@ -1,5 +1,5 @@
 // pages/api/invitation.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextRequest, NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import clientPromise from '../../lib/mongodb';
 
@@ -10,7 +10,7 @@ interface Invitation {
   time: string;
 }
 
-export async function GET(req: Request, res: Response) {
+export async function GET(req: NextRequest, res: Response) {
   try {
     let invitation = null;
     const client = await clientPromise;
