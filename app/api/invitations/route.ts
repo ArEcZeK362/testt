@@ -1,5 +1,6 @@
 // pages/api/invitation.ts
-import type { NextRequest, NextApiRequest, NextApiResponse } from 'next';
+import type { NextRequest } from 'next/server';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import clientPromise from '../../lib/mongodb';
 
