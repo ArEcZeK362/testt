@@ -1,7 +1,7 @@
 // pages/api/invitation.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
-import clientPromise from '../lib/mongodb';
+import clientPromise from '../../lib/mongodb';
 
 interface Invitation {
   name: string;
@@ -14,17 +14,16 @@ export async function GET(req: Request, res: Response) {
   try {
     const client = await clientPromise;
     const db = client.db('osoby_osiemnastka');
-    const invitation = await db.collection('zaproszeni').find({}).toArray();
+    //const invitation = await db.collection('zaproszeni').find({}).toArray();
     //console.log(invitation);
     const invitationsCount = await db.collection('zaproszeni').countDocuments();
     const info = await db.collection('info').findOne({});
-    const all = Object.assign({}, invitation, info, { count: invitationsCount });
+    const all = Object.assign({}, info, { count: invitationsCount });
     
-    if (!invitation || !info) {
+    if (!invitationsCount || !info) {
       return new (Response as any).json({ error: 'Invation not found' }, { status: 404 });
     }
-    return new (Response as any)(JSON.stringify(invitation), { status: 200, headers: { 'content-type': 'application/json' }});
-    //return new (Response as any)(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json ' }});
+    return new (Response as any)(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json ' }});
   } catch (e) {
     console.error(e);
     return new (Response as any).json({ error: 'Internal Server Error' }, { status: 500 });

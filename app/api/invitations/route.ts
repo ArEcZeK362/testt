@@ -1,7 +1,7 @@
 // pages/api/invitation.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
-import clientPromise from '../lib/mongodb';
+import clientPromise from '../../lib/mongodb';
 
 interface Invitation {
   name: string;
@@ -12,9 +12,20 @@ interface Invitation {
 
 export async function GET(req: Request, res: Response) {
   try {
+    let invitation = null;
     const client = await clientPromise;
     const db = client.db('osoby_osiemnastka');
-    const invitation = await db.collection('zaproszeni').find({}).toArray();
+    //const invitation = await db.collection('zaproszeni').find({}).toArray();
+    const shortcut = req.nextUrl.searchParams.get('shortcut') as string;
+        console.log(shortcut);
+        /*if (!shortcut) {
+        	return new (Response as any).json({ error: 'Brak parametru shortcut '}, { status: 400 });
+        }*/
+        if ((!shortcut) || (shortcut === '')) {
+        	invitation = await db.collection('zaproszeni').find({}).toArray();
+        } else if ((shortcut) || (shortcut !== '')) {
+        	invitation = await db.collection('zaproszeni').find({ "shortcut": shortcut }).toArray();
+        }
     //console.log(invitation);
     const invitationsCount = await db.collection('zaproszeni').countDocuments();
     const info = await db.collection('info').findOne({});

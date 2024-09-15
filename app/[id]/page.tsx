@@ -5,12 +5,17 @@ import { useRouter } from 'next/navigation';
 import Layout from '../components/invite';
 import confetti from 'canvas-confetti';
 
+// Typ dla Info
+interface Info {
+	location: string;
+	date: string;
+	time: string;
+	count: number;
+}
+
 // Typ dla zaproszenia
 interface Invitation {
   imie_nazwisko: string;
-  location: string;
-  date: string;
-  time: string;
   shortcut: string;
   plusOne: boolean;
   osoba_towarzyszaca?: string | null;
@@ -18,6 +23,7 @@ interface Invitation {
 
 export default function Home({ params }: { params: any }) {
   const [invitation, setInvitation] = useState<Invitation | null>(null);
+  const [info, setInfo] = useState<Info | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,11 +37,22 @@ export default function Home({ params }: { params: any }) {
     // Funkcja do pobrania zaproszenia z bazy danych
     const fetchInvitation = async () => {
       try {
-        const response = await fetch('/api');
-        if (response.ok) {
-          const data = await response.json();
+
+        const response_info = await fetch('/api/info');
+        if (response_info.ok) {
+        	const data = await response_info.json();
+        	console.log(data);
+        	setInfo(data);
+        } else {
+        	setError('Nie znaleziono info');
+        }
+      
+        const response_invation = await fetch(`/api/invitations?shortcut=${shortcut}`);
+        if (response_invation.ok) {
+          const data = await response_invation.json();
           console.log(data);
-          if (data && data.shortcut === shortcut) {
+          console.log(data[0].shortcut);
+          if (data && data[0].shortcut === shortcut) {
             setTimeout(() => confetti({
                           particleCount: 140,
                           spread: 100,
@@ -44,7 +61,7 @@ export default function Home({ params }: { params: any }) {
                         }), 500);
             setInvitation(data); // Ustawienie danych zaproszenia
           } else {
-            //setError('Nie znaleziono zaproszenia');
+            setError('Nie znaleziono zaproszenia');
           }
         } else {
           setError('Błąd podczas pobierania zaproszenia');
@@ -116,11 +133,11 @@ export default function Home({ params }: { params: any }) {
           {invitation ? (
             <>
               <p>Serdecznie zapraszam na osiemnaste urodziny</p>
-              <h2><strong>{invitation.imie_nazwisko}</strong></h2>
+              <h2><strong>{invitation[0].imie_nazwisko}</strong></h2>
               {/* Sprawdzenie, czy osoba może przyjść z osobą towarzyszącą */}
-                            {invitation.plusOne ? (
-                              invitation.osoba_towarzyszaca ? (
-                                <p>wraz z: <strong>{invitation.osoba_towarzyszaca}</strong></p>
+                            {invitation[0].plusOne ? (
+                              invitation[0].osoba_towarzyszaca ? (
+                                <p>wraz z: <strong>{invitation[0].osoba_towarzyszaca}</strong></p>
                               ) : (
                                 <p>wraz z Osobą Towarzyszącą.</p>
                               )
@@ -128,9 +145,9 @@ export default function Home({ params }: { params: any }) {
                               <></>
                             )}
               <p>Impreza odbędzie się w:</p>
-              <h3><strong>{invitation.location}</strong></h3>
-              <p>Data: <strong>{invitation.date}</strong></p>
-              <p>Godzina: <strong>{invitation.time}</strong></p>
+              <h3><strong>{info.location}</strong></h3>
+              <p>Data: <strong>{info.date}</strong></p>
+              <p>Godzina: <strong>{info.time}</strong></p>
             </>
           ) : (
             <p>Nie znaleziono zaproszenia</p>
