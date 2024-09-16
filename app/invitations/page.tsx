@@ -40,13 +40,7 @@ export default function InvitationsPage() {
       
         const response_invitations = await fetch('/api/invitations'); // Pobieramy wszystkie zaproszenia
         if (response_invitations.ok) {
-          //console.log(response.json());
           const data = await response_invitations.json()
-          //console.log(dataa);
-          //const data = [...Object.values(dataa)];
-          //console.log(dataa);
-
-          //console.log(dataa);
           
           setInvitations(data); // Ustawiamy zaproszenia
           
@@ -64,12 +58,6 @@ export default function InvitationsPage() {
     fetchInvitations_Info();
   }, []);
 
-  console.log(invitations);
-
-  //const invitations = invitationss.toArray();
-
-  //console.log(invitations);
-
   // Funkcja do kopiowania linku do schowka
   const copyLinkToClipboard = (shortcut: string) => {
     const invitationUrl = `${window.location.origin}/${shortcut}`;
@@ -78,9 +66,6 @@ export default function InvitationsPage() {
     }, function(err) {
     	console.error("Could not copy text: ", err);
     });
-    /*navigator.clipboard.writeText(invitationUrl)
-      .then(() => alert('Skopiowano link do schowka!'))
-      .catch(err => console.error('Błąd kopiowania linku', err));*/
   };
 
   if (loading) {

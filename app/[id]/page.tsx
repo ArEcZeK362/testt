@@ -15,7 +15,6 @@ interface Info {
 
 // Typ dla zaproszenia
 interface Invitation {
-  0: any;
   imie_nazwisko: string;
   shortcut: string;
   plusOne: boolean;
@@ -53,10 +52,6 @@ export default function Home({ params }: { params: any }) {
           //console.log(data);
           const result = data.find((invitation) => invitation.shortcut === shortCut);
           console.log(result)
-          data.forEach((item) => {
-          	//const result = item.find(({ shortcut }) => shortcut === shortCut);
-          	//console.log(item);
-          })
           
           //console.log(data[0].shortcut);
           if (result) {
@@ -137,7 +132,7 @@ export default function Home({ params }: { params: any }) {
           zIndex: 1,
           textAlign: 'center'
         }}>
-          {invitation && info ? (
+          {invitation ? (
             <>
               <p>Serdecznie zapraszam na osiemnaste urodziny</p>
               <h2><strong>{invitation.imie_nazwisko}</strong></h2>
@@ -246,5 +241,3 @@ export default function Home({ params }: { params: any }) {
     </Layout>*/
   );
 }
-
-
