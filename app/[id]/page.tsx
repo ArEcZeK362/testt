@@ -132,7 +132,7 @@ export default function Home({ params }: { params: any }) {
           zIndex: 1,
           textAlign: 'center'
         }}>
-          {invitation ? (
+          {invitation && info ? (
             <>
               <p>Serdecznie zapraszam na osiemnaste urodziny</p>
               <h2><strong>{invitation.imie_nazwisko}</strong></h2>

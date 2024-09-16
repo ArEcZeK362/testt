@@ -21,13 +21,13 @@ export async function GET(req: NextRequest, res: Response) {
     const all = Object.assign({}, invitation, info, { count: invitationsCount });
     console.log(res);
     if (!invitation || !info) {
-      return res.json({ error: 'Invation not found' }, { status: 404 });
+      return new (Response as any).json({ error: 'Invation not found' }, { status: 404 });
     }
-    return new Response(JSON.stringify(invitation), { status: 200, headers: { 'content-type': 'application/json' }});
+    return new (Response as any)(JSON.stringify(invitation), { status: 200, headers: { 'content-type': 'application/json' }});
     //return new (Response as any)(JSON.stringify(all), { status: 200, headers: { 'content-type': 'application/json ' }});
   } catch (e) {
     console.error(e);
-    return res.json({ error: 'Internal Server Error' }, { status: 500 });
+    return new (Response as any).json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
