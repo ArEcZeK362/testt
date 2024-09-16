@@ -13,21 +13,9 @@ interface Invitation {
 
 export async function GET(req: NextRequest, res: Response) {
   try {
-    let invitation = null;
     const client = await clientPromise;
     const db = client.db('osoby_osiemnastka');
-    //const invitation = await db.collection('zaproszeni').find({}).toArray();
-    const shortcut = req.nextUrl.searchParams.get('shortcut') as string;
-        console.log(shortcut);
-        /*if (!shortcut) {
-        	return new (Response as any).json({ error: 'Brak parametru shortcut '}, { status: 400 });
-        }*/
-        if ((!shortcut) || (shortcut === '')) {
-        	invitation = await db.collection('zaproszeni').find({}).toArray();
-        } else if ((shortcut) || (shortcut !== '')) {
-        	invitation = await db.collection('zaproszeni').find({ "shortcut": shortcut }).toArray();
-        }
-    //console.log(invitation);
+    const invitation = await db.collection('zaproszeni').find({}).toArray();
     const invitationsCount = await db.collection('zaproszeni').countDocuments();
     const info = await db.collection('info').findOne({});
     const all = Object.assign({}, invitation, info, { count: invitationsCount });

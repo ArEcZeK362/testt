@@ -7,6 +7,7 @@ interface Info {
 	location: string;
 	date: string;
 	count: number;
+	time: string;
 }
 
 // Typ dla zaproszenia
@@ -30,27 +31,25 @@ export default function InvitationsPage() {
         const response_info = await fetch('/api/info');
         if (response_info.ok) {
         	const dataa = await response_info.json();
-        	const data = [...Object.values(dataa)];
-        	console.log(data);
+        	//const data = [...Object.values(dataa)];
+        	
+        	const data = Array.isArray(dataa) ? dataa[0] : dataa;
 
-        	if (data) {
-        		setInfo(data);
-        	} else {
-        		setError('Błąd podczas pobierania info');
-        	}
+        	setInfo(data);
         }
       
         const response_invitations = await fetch('/api/invitations'); // Pobieramy wszystkie zaproszenia
         if (response_invitations.ok) {
           //console.log(response.json());
-          const dataa = await response_invitations.json()
-          console.log(dataa);
-          const data = [...Object.values(dataa)];
-          console.log(data);
+          const data = await response_invitations.json()
+          //console.log(dataa);
+          //const data = [...Object.values(dataa)];
+          //console.log(dataa);
+
+          //console.log(dataa);
           
-          if (data) {
-          	setInvitations(data); // Ustawiamy zaproszenia
-          }
+          setInvitations(data); // Ustawiamy zaproszenia
+          
         } else {
           setError('Błąd podczas pobierania zaproszeń');
         }
@@ -64,6 +63,8 @@ export default function InvitationsPage() {
 
     fetchInvitations_Info();
   }, []);
+
+  console.log(invitations);
 
   //const invitations = invitationss.toArray();
 
@@ -93,7 +94,7 @@ export default function InvitationsPage() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <h1>Lista zaproszonych osób</h1>
-      {info[4] >= 0 ? (
+      {invitations.length > 0 ? (
         <ul style={{ listStyleType: 'none', padding: 0 }}>
           {invitations.map(invitation => (
                       <li key={invitation.shortcut} style={{ margin: '10px 0', display: 'flex', alignItems: 'center' }}>

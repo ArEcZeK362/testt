@@ -19,6 +19,8 @@ export async function GET(req: Request, res: Response) {
     const invitationsCount = await db.collection('zaproszeni').countDocuments();
     const info = await db.collection('info').findOne({});
     const all = Object.assign({}, info, { count: invitationsCount });
+    //const all = JSON.parse(invitationsCount, info);
+    console.log(all);
     
     if (!invitationsCount || !info) {
       return new (Response as any).json({ error: 'Invation not found' }, { status: 404 });
