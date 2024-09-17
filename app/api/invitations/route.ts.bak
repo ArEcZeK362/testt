@@ -1,6 +1,6 @@
 // pages/api/invitation.ts
 import type { NextRequest } from 'next/server';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import clientPromise from '../../lib/mongodb';
 
@@ -12,9 +12,6 @@ interface Invitation {
 }
 
 export async function GET(req: NextRequest, res: Response) {
-  if (process.env.SKIP_API_DURING_BUILD === 'true') {
-  	return new (Response as any).json({ message: 'API not available during build '}, { status: 404 });
-  }
   try {
     const client = await clientPromise;
     const db = client.db('osoby_osiemnastka');
