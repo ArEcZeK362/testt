@@ -23,13 +23,28 @@ interface Invitation {
 
 // Typ dla propsów strony
 interface HomeProps {
-  invitation: Invitation | null;
-  info: Info | null;
+	params: { id: string };
 }
 
-export default function Home({ invitation, info }: HomeProps) {
+async function getData(shortcut: string) {
+	// Pobieranie informacji o wydarzeniu
+		    const responseInfo = await fetch('http://localhost:3000/api/info');
+		    const info = responseInfo.ok ? await responseInfo.json() : null;
+		
+		    // Pobieranie zaproszenia na podstawie shortcut
+		    const responseInvitation = await fetch('http://localhost:3000/api/invitations');
+		    const invitations: Invitation[] = await responseInvitation.json();
+		    const invitation = invitations.find(inv => inv.shortcut === shortcut) || null;
+	
+			return { info, invitation };
+}
+
+export default async function Home({ params }: HomeProps) {
+  const { id: shortCut } = params;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { info, invitation } = await getData(shortCut);
 
   useEffect(() => {
     if (invitation) {
@@ -125,36 +140,3 @@ export default function Home({ invitation, info }: HomeProps) {
     </Layout>
   );
 }
-
-// getServerSideProps - pobiera dane po stronie serwera na podstawie parametrów
-export async function getServerSideProps(context: any) {
-  const { params } = context;
-  const shortCut = params?.id;
-
-  try {
-    // Pobieranie informacji o wydarzeniu
-    const responseInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/info`);
-    const info = responseInfo.ok ? await responseInfo.json() : null;
-
-    // Pobieranie zaproszenia na podstawie shortcut
-    const responseInvitation = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invitations`);
-    const invitations: Invitation[] = await responseInvitation.json();
-    const invitation = invitations.find(inv => inv.shortcut === shortCut) || null;
-
-    return {
-      props: {
-        info,
-        invitation
-      }
-    };
-  } catch (error) {
-    console.error('Błąd podczas pobierania danych:', error);
-    return {
-      props: {
-        info: null,
-        invitation: null
-      }
-    };
-  }
-}
-
